@@ -13,6 +13,7 @@ async function cargarShows() {
 }
 
 onMounted(() => {
+  //TODO: que no se cargue a cada rato al montar, que se guarden en un estado, con pinia
   cargarShows();
 });
 </script>

@@ -5,6 +5,15 @@ const axiosInstance = axios.create({
   timeout: 5000, // Timeout de la solicitud, puedes ajustarlo a tus necesidades
 });
 
+//TODO: Implementar interceptores para enviar el token de autenticación
+// axiosInstance.interceptors.request.use(async (config) => {
+//   const token = await localStorage.getItem('userToken');
+//   if (token) {
+//     config.headers['Authorization'] = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
 // Función para hacer solicitudes GET
 export const getData = async (endpoint) => {
   try {

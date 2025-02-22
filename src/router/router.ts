@@ -3,7 +3,7 @@ import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Shows from '@/views/Shows.vue'
 import Login from '@/views/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
+import Dashboard from '@/views/Dashboard.vue'
 import { useAuthStore } from '@/stores/authStore'
 import Marca from '@/views/Marca.vue'
 
