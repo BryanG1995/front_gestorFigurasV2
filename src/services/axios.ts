@@ -6,13 +6,13 @@ const axiosInstance = axios.create({
 });
 
 //TODO: Implementar interceptores para enviar el token de autenticación
-// axiosInstance.interceptors.request.use(async (config) => {
-//   const token = await localStorage.getItem('userToken');
-//   if (token) {
-//     config.headers['Authorization'] = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+axiosInstance.interceptors.request.use(async (config) => {
+  const token = await localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // Función para hacer solicitudes GET
 export const getData = async (endpoint) => {

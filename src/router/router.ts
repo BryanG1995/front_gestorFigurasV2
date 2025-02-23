@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Shows from '@/views/Shows.vue'
 import Login from '@/views/Login.vue'
+import Figuras from '@/views/Figuras.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import { useAuthStore } from '@/stores/authStore'
 import Marca from '@/views/Marca.vue'
@@ -12,6 +13,7 @@ const routes = [
   { path: '/about', name: 'About', component: About, meta: { requiresAuth: true } },  
   { path: '/show', name: 'Shows', component: Shows, meta: { requiresAuth: true } }, 
   { path: '/marca', name: 'Marcas', component: Marca, meta: { requiresAuth: true } }, 
+  { path: '/figura', name: 'Figuras', component: Figuras, meta: { requiresAuth: true } }, 
   { path: '/login', name: 'Login', component: Login },
   { 
     path: '/dashboard', 

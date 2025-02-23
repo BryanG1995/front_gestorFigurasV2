@@ -5,7 +5,7 @@ import { postData } from '@/services/axios'  // Importar la función postData
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null)
-  const user = ref(null)
+  const user = ref(JSON.parse(localStorage.getItem('user') || 'null'));
   const router = useRouter()
 
   async function login(email: string, password: string) {
@@ -14,7 +14,13 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await postData('/auth/login', { email, password })
       
       token.value = response.token
-      localStorage.setItem('token', response.token)
+      user.value = {
+        id: response.id,
+        email: response.email,
+        nombre: response.nombre,
+      };
+      localStorage.setItem('token', token.value)
+      localStorage.setItem('user', JSON.stringify(user.value)) // Guardamos el usuario en localStorage
 
       router.push({ name: 'Dashboard' }) // Redirigir tras login
     } catch (error) {
@@ -26,6 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     user.value = null
     localStorage.removeItem('token')
+    localStorage.removeItem('user');
     router.push({ name: 'Login' }) // Redirigir tras logout
   }
 
