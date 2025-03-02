@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('token', token.value)
       localStorage.setItem('user', JSON.stringify(user.value)) // Guardamos el usuario en localStorage
 
-      router.push({ name: 'Dashboard' }) // Redirigir tras login
+      router.push({ name: 'landing' }) // Redirigir tras login
     } catch (error) {
       throw new Error('Credenciales incorrectas')
     }

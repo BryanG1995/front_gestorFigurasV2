@@ -7,17 +7,25 @@ import Figuras from '@/views/Figuras.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import { useAuthStore } from '@/stores/authStore'
 import Marca from '@/views/Marca.vue'
+import SidebarLayout from '@/layout/SidebarLayout.vue'
 
-const routes = [
-  { path: '/', name: 'Home', component: Home , meta: { requiresAuth: true }},  
-  { path: '/about', name: 'About', component: About, meta: { requiresAuth: true } },  
-  { path: '/show', name: 'Shows', component: Shows, meta: { requiresAuth: true } }, 
-  { path: '/marca', name: 'Marcas', component: Marca, meta: { requiresAuth: true } }, 
-  { path: '/figura', name: 'Figuras', component: Figuras, meta: { requiresAuth: true } }, 
+import type { RouteRecordRaw } from 'vue-router'
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/', name: 'landing', component: SidebarLayout, meta: { requiresAuth: true }, children: [
+      { path: '/about', name: 'About', component: About, meta: { requiresAuth: true } },
+      { path: '/show', name: 'Shows', component: Shows, meta: { requiresAuth: true } },
+      { path: '/marca', name: 'Marcas', component: Marca, meta: { requiresAuth: true } },
+      { path: '/figura', name: 'Figuras', component: Figuras, meta: { requiresAuth: true } }
+    ]
+  },
+
+
   { path: '/login', name: 'Login', component: Login },
-  { 
-    path: '/dashboard', 
-    name: 'Dashboard', 
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
     component: Dashboard,
     meta: { requiresAuth: true } // Solo accesible si el usuario está autenticado
   }
