@@ -1,36 +1,98 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { getData } from '@/services/axios';
 
 const shows = ref([]);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(5);
 
 async function cargarShows() {
-    const data = await getData('/show'); // Aquí solo pasas la ruta relativa
-    
-      // Ordenar los datos, por ejemplo, por nombre (de la A a la Z)
-     shows.value = data.sort((a, b) => a.nombre.localeCompare(b.nombre));
-    shows.value = data;
+    const data = await getData('/show');
+    shows.value = data.sort((a, b) => a.nombre.localeCompare(b.nombre));
 }
 
+// Filtrado de datos por búsqueda
+const showsFiltrados = computed(() => {
+  if (!searchQuery.value) return shows.value;
+  return shows.value.filter(show =>
+    show.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+// Paginación
+const totalPages = computed(() => Math.ceil(showsFiltrados.value.length / itemsPerPage.value));
+const showPaginadas = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  return showsFiltrados.value.slice(start, start + Number(itemsPerPage.value));
+});
+
+function setPage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+}
+
+// Resetear `currentPage` cuando cambia `itemsPerPage`
+watch(itemsPerPage, () => {
+  currentPage.value = 1;
+});
+
 onMounted(() => {
-  //TODO: que no se cargue a cada rato al montar, que se guarden en un estado, con pinia
   cargarShows();
 });
 </script>
 
 <template>
-    <table class="table-auto border-collapse border border-gray-300">
-      <thead>
-        <tr class="bg-gray-100">
-          <th class="border border-gray-300 px-4 py-2">ID</th>
-          <th class="border border-gray-300 px-4 py-2">Nombre</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="show in shows" :key="show.id" class="hover:bg-gray-100">
-          <td class="border border-gray-300 px-4 py-2">{{ show.id }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ show.nombre }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </template>
+  <body class="antialiased font-sans bg-gray-200">
+    <div class="container mx-auto px-4 sm:px-8">
+      <div class="py-8">
+        <h2 class="text-2xl font-semibold leading-tight">Shows</h2>
+
+        <!-- Controles de búsqueda y paginación -->
+        <div class="my-2 flex flex-col sm:flex-row justify-between">
+          <select v-model="itemsPerPage"
+            class="h-full rounded border bg-white text-gray-700 py-2 px-4">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+
+          <input v-model="searchQuery" placeholder="Buscar..."
+            class="appearance-none border border-gray-400 rounded py-2 px-4 text-gray-700 focus:outline-none" />
+        </div>
+
+        <!-- Tabla de datos -->
+        <div class="overflow-x-auto shadow rounded-lg bg-white">
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th class="px-5 py-3 border-b bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Nombre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="show in showPaginadas" :key="show.id">
+                <td class="px-5 py-5 border-b text-gray-900">{{ show.nombre }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="flex justify-between items-center mt-4">
+          <span class="text-xs text-gray-900">
+            Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - 
+            {{ Math.min(currentPage * itemsPerPage, showsFiltrados.length) }} de 
+            {{ showsFiltrados.length }} registros
+          </span>
+          <div>
+            <button @click="setPage(currentPage - 1)" :disabled="currentPage === 1"
+              class="bg-gray-300 px-4 py-2 rounded-l disabled:opacity-50">Anterior</button>
+            <button @click="setPage(currentPage + 1)" :disabled="currentPage >= totalPages.value"
+              class="bg-gray-300 px-4 py-2 rounded-r disabled:opacity-50">Siguiente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</template>
