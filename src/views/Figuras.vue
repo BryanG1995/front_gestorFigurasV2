@@ -1,8 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { getData } from '@/services/axios';
 
-// Estado reactivo para las figuras
+const router = useRouter();
 const figuras = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1);
@@ -35,12 +36,27 @@ function setPage(page) {
   }
 }
 
-// Resetear `currentPage` cuando cambia `itemsPerPage`
+// Redirigir a la vista de detalles
+function verDetalle(id) {
+  router.push(`/figura/${id}`);
+}
+
+// Lógica para editar
+function editarFigura(figura) {
+  console.log('Editar:', figura);
+  // Aquí podrías abrir un modal o navegar a una vista de edición
+}
+
+// Lógica para eliminar
+function eliminarFigura(id) {
+  //#TODO: agregar logica de borrado
+  figuras.value = figuras.value.filter(figura => figura.id !== id);
+}
+
 watch(itemsPerPage, () => {
   currentPage.value = 1;
 });
 
-// Montar datos al iniciar
 onMounted(() => {
   cargarFiguras();
 });
@@ -54,7 +70,6 @@ onMounted(() => {
         
         <!-- Controles de búsqueda y paginación -->
         <div class="my-2 flex flex-col sm:flex-row justify-between">
-          <!-- Selector de cantidad por página -->
           <select v-model="itemsPerPage"
             class="h-full rounded border bg-white text-gray-700 py-2 px-4">
             <option value="5">5</option>
@@ -62,7 +77,6 @@ onMounted(() => {
             <option value="20">20</option>
           </select>
 
-          <!-- Input de búsqueda -->
           <input v-model="searchQuery" placeholder="Buscar..."
             class="appearance-none border border-gray-400 rounded py-2 px-4 text-gray-700 focus:outline-none" />
         </div>
@@ -78,6 +92,7 @@ onMounted(() => {
                 <th class="px-5 py-3 border-b bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Marca</th>
                 <th class="px-5 py-3 border-b bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Fecha de Compra</th>
                 <th class="px-5 py-3 border-b bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Precio</th>
+                <th class="px-5 py-3 border-b bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -88,6 +103,11 @@ onMounted(() => {
                 <td class="px-5 py-5 border-b text-gray-900">{{ figura.modelo.marca.nombre }}</td>
                 <td class="px-5 py-5 border-b text-gray-900">{{ figura.fechaCompra }}</td>
                 <td class="px-5 py-5 border-b text-gray-900">${{ figura.precio }}</td>
+                <td class="px-5 py-5 border-b text-center">
+                  <button @click="verDetalle(figura.id)" class="bg-blue-500 text-white px-3 py-1 rounded mr-2">Ver</button>
+                  <button @click="editarFigura(figura)" class="bg-yellow-500 text-white px-3 py-1 rounded mr-2">Editar</button>
+                  <button @click="eliminarFigura(figura.id)" class="bg-red-500 text-white px-3 py-1 rounded">Eliminar</button>
+                </td>
               </tr>
             </tbody>
           </table>

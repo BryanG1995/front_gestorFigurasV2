@@ -10,6 +10,7 @@ import Marca from '@/views/Marca.vue'
 import SidebarLayout from '@/layout/SidebarLayout.vue'
 
 import type { RouteRecordRaw } from 'vue-router'
+import DetallesFigura from '@/views/DetallesFigura.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,7 +18,8 @@ const routes: RouteRecordRaw[] = [
       { path: '/about', name: 'About', component: About, meta: { requiresAuth: true } },
       { path: '/show', name: 'Shows', component: Shows, meta: { requiresAuth: true } },
       { path: '/marca', name: 'Marcas', component: Marca, meta: { requiresAuth: true } },
-      { path: '/figura', name: 'Figuras', component: Figuras, meta: { requiresAuth: true } }
+      { path: '/figura', name: 'Figuras', component: Figuras, meta: { requiresAuth: true } },
+      { path: '/figura/:id', name: 'DetallesFigura', component: DetallesFigura, props: true ,meta: { requiresAuth: true } }
     ]
   },
 
