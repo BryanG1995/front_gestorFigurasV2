@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getData } from '@/services/axios';
-import { defineProps } from 'vue';
+
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay, Pagination } from 'swiper/modules'; // Importa los módulos necesarios
 import 'swiper/swiper-bundle.css'; // Importa los estilos de Swiper

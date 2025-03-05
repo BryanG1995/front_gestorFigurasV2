@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 const props = defineProps({
     width: { String, default: '25' },
     height: { String, default: '25' }
