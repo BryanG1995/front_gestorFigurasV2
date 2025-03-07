@@ -9,6 +9,8 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
 
+
+
 // Cargar datos desde la API
 async function cargarFiguras() {
   const data = await getData('/figura');
@@ -76,6 +78,10 @@ onMounted(() => {
             <option value="10">10</option>
             <option value="20">20</option>
           </select>
+
+          <router-link to="/nueva-figura" class="bg-green-500 text-white px-4 py-2 rounded">
+            Crear Nueva Figura
+          </router-link>
 
           <input v-model="searchQuery" placeholder="Buscar..."
             class="appearance-none border border-gray-400 rounded py-2 px-4 text-gray-700 focus:outline-none" />

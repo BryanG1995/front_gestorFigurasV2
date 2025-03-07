@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // Aquí puedes poner la URL base de tu backend
-  timeout: 7000, // Timeout de la solicitud, puedes ajustarlo a tus necesidades
+  baseURL: 'http://localhost:3000', // URL base de tu backend
+  timeout: 7000, // Timeout de la solicitud
 });
 
-//TODO: Implementar interceptores para enviar el token de autenticación
+// Agregar el token de autenticación a cada solicitud
 axiosInstance.interceptors.request.use(async (config) => {
   const token = await localStorage.getItem('token');
   if (token) {
@@ -15,23 +15,24 @@ axiosInstance.interceptors.request.use(async (config) => {
 });
 
 // Función para hacer solicitudes GET
-export const getData = async (endpoint) => {
+export const getData = async (endpoint: string) => {
   try {
     const response = await axiosInstance.get(endpoint);
-    return response.data; // Retorna los datos de la respuesta
+    return response.data;
   } catch (error) {
-    console.error('Error al hacer la solicitud:', error);
+    console.error('Error en GET:', error);
     throw error;
   }
 };
 
-// Función para hacer solicitudes POST, ahora recibe los datos a enviar
-export const postData = async (endpoint, data) => {
+// Función para hacer solicitudes POST
+export const postData = async (endpoint: string, data: any, isFile = false) => {
   try {
-    const response = await axiosInstance.post(endpoint, data);
-    return response.data; // Retorna los datos de la respuesta
+    const headers = isFile ? { 'Content-Type': 'multipart/form-data' } : {};
+    const response = await axiosInstance.post(endpoint, data, { headers });
+    return response.data;
   } catch (error) {
-    console.error('Error al hacer la solicitud:', error);
+    console.error('Error en POST:', error);
     throw error;
   }
 };
